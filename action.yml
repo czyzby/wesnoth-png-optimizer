@@ -1,0 +1,12 @@
+name: 'PNG Optimizer'
+description: 'Runs the woptipng tool to verify the PNG images.'
+inputs:
+  threshold:
+    description: 'The optimization threshold for the woptipng tool.'
+    required: true
+    default: 10
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.threshold }}
