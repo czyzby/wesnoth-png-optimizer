@@ -4,7 +4,7 @@
 exec 5>&1
 
 echo "Running woptipng."
-output=$(python /wesnoth/utils/woptipng.py . --threshold $1 2>&1 | tee >(cat - >&5))
+output=$(python /wesnoth/utils/woptipng.py -d . --threshold $1 2>&1 | tee >(cat - >&5))
 
 if printf "%s\n" "${output[@]}" | grep -Fxq "Nothing optimized"; then
     exit 0
