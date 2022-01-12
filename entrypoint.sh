@@ -14,7 +14,7 @@ git clone \
 # Capturing Python script stdout.
 exec 5>&1
 
-echo "Running woptipng with $2 threshold."
+echo "Running woptipng with a threshold of $2."
 output=$(python /wesnoth/utils/woptipng.py -d $1 --threshold $2 2>&1 | tee >(cat - >&5))
 
 if printf "%s\n" "${output[@]}" | grep -Fxq "Nothing optimized"; then
