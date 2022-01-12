@@ -1,12 +1,22 @@
 name: 'PNG Optimizer'
 description: 'Runs the woptipng tool to verify the PNG images.'
 inputs:
+  path:
+    description: 'Path to file or directory that should be validated.'
+    required: true
+    default: .
   threshold:
     description: 'The optimization threshold for the woptipng tool.'
     required: true
     default: 10
+  wesnoth-version:
+    description: 'Wesnoth repository branch or tag to check against.'
+    required: false
+    default: master
 runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
+    - ${{ inputs.path }}
     - ${{ inputs.threshold }}
+    - ${{ inputs.wesnoth-version }}

@@ -16,18 +16,26 @@ which means that the uploaded PNG files can be within 10% of the size
 of the compressed images. If any of the images are larger than that,
 the action will fail, and the files will be listed by the `woptipng` tool.
 
+The Wesnoth version that the PNG images are checked against can
+be specified with the `wesnoth-version` parameter. It can match
+any Wesnoth [branch](https://github.com/wesnoth/wesnoth/branches)
+or [tag](https://github.com/wesnoth/wesnoth/tags).
+
+The folder or file that should be validated can be specified with
+the `path` parameter.
+
 ### Examples
 
 A workflow that verifies PNG images on every push to the repository,
 as well as every pull request:
 
 ```yaml
-name: lint
+name: check
 
 on: [push, pull_request]
 
 jobs:
-  build:
+  check:
     runs-on: ubuntu-latest
 
     steps:
@@ -37,11 +45,13 @@ jobs:
       uses: czyzby/wesnoth-png-optimizer@v1
 ```
 
-A workflow that verifies PNG images with a custom threshold on every push
-or pull request to a specific branch:
+
+A workflow that verifies WML files in the `images/units/` folder against
+Wesnoth 1.16 `woptipng` with a custom threshold on every push or pull
+request to a specific branch:
 
 ```yaml
-name: lint
+name: check
 
 on:
   push:
@@ -50,7 +60,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  check:
     runs-on: ubuntu-latest
 
     steps:
@@ -59,7 +69,9 @@ jobs:
     - name: Verify images
       uses: czyzby/wesnoth-png-optimizer@v1
       with:
+        path: images/units/
         threshold: 5
+        wesnoth-version: 1.16
 ```
 
 ## Notes
