@@ -1,8 +1,8 @@
 # Wesnoth Image Optimizer
 
 A GitHub Action for [Wesnoth](https://www.wesnoth.org/) add-ons.
-Verifies PNG images using the `woptipng` tool from a partially cloned
-[Wesnoth repository](https://github.com/wesnoth/wesnoth).
+Verifies PNG images using the `woptipng` tool from a partially
+cloned [Wesnoth repository](https://github.com/wesnoth/wesnoth).
 
 ## Usage
 
@@ -22,7 +22,8 @@ any Wesnoth [branch](https://github.com/wesnoth/wesnoth/branches)
 or [tag](https://github.com/wesnoth/wesnoth/tags).
 
 The folder or file that should be validated can be specified with
-the `path` parameter.
+the `path` parameter. By default, all images in the project will
+be verified.
 
 ### Examples
 
@@ -78,3 +79,10 @@ jobs:
 
 Use `@v1` for the latest stable release. Use `@latest` for the latest
 version directly from the default development branch.
+
+### See also
+
+* [`czyzby/wesnoth-wml-linter`](https://github.com/czyzby/wesnoth-wml-linter):
+a GitHub Action that verifies WML files with `wmllint` and `wmlindent`.
+* [`czyzby/wesnoth-wml-scope`](https://github.com/czyzby/wesnoth-wml-scope):
+a GitHub Action that verifies project resources with `wmlscope`.
