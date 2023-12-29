@@ -10,7 +10,7 @@ git clone \
     -c advice.detachedHead=false \
     https://github.com/wesnoth/wesnoth \
     /wesnoth
-(cd /wesnoth && git sparse-checkout set utils/woptipng.py)
+(cd /wesnoth && git sparse-checkout --no-cone set utils/woptipng.py)
 echo "Wesnoth repository is ready."
 
 # Capturing Python script stdout.
