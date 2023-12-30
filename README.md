@@ -41,7 +41,7 @@ jobs:
 
     steps:
     - name: Repository checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
     - name: Verify images
       uses: czyzby/wesnoth-png-optimizer@v1
 ```
@@ -66,13 +66,49 @@ jobs:
 
     steps:
     - name: Repository checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
     - name: Verify images
       uses: czyzby/wesnoth-png-optimizer@v1
       with:
         path: images/units/
         threshold: 5
         wesnoth-version: 1.16
+```
+
+By leveraging the `continue-on-error` flag and write permissions,
+GitHub Action can also be set up to optimize and commit the images
+rather than verify them. This is an example of an action that runs
+on every push to the `main` branch and optimizes all images from
+the repository:
+
+```yaml
+name: optimize
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: write
+
+jobs:
+  optimize:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    - name: Optimize images
+      uses: czyzby/wesnoth-png-optimizer@v1
+      continue-on-error: true
+      with:
+        threshold: 0
+    - name: Commit images
+      run: |
+        git config --global user.name "github-actions"
+        git config --global user.email "actions@users.noreply.github.com"
+        git commit -am "🤖 Optimize $GITHUB_REPOSITORY@$GITHUB_SHA"
+        git push
 ```
 
 ## Notes
