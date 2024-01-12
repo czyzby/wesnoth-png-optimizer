@@ -111,6 +111,54 @@ jobs:
         git push
 ```
 
+The following example similarly optimizes the images instead of just
+verifying them, but instead of pushing commits directly to the branch,
+it sets up a PR after each successful optimization. This might be
+preferable to the previous approach if you'd like to accept the changes
+manually, or if the main branch is protected. Note that it requires
+setting up a [private access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-fine-grained-personal-access-token)
+and adding it in the repository _Settings_ tab under
+_Secrets and variables > Actions_ as `PRIVATE_ACCESS_TOKEN`.
+
+```yaml
+name: optimize
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  optimize:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    - name: Optimize images
+      uses: czyzby/wesnoth-png-optimizer@v1
+      continue-on-error: true
+      with:
+        threshold: 0
+    - name: Commit changes
+      continue-on-error: true
+      run: |
+        git config user.name "GitHub Action"
+        git config user.email "actions@users.noreply.github.com"
+        git config --add --bool push.autoSetupRemote true
+        git checkout -b "optimize/$GITHUB_SHA"
+        git commit -am "🤖 Optimize $GITHUB_REPOSITORY@$GITHUB_SHA" && git push
+
+    - name: Create pull request
+      run: gh pr create -B main -H "optimize/$GITHUB_SHA" --title "Optimize images from @${GITHUB_SHA::7}" --body "Images from $GITHUB_REPOSITORY@$GITHUB_SHA optimized with `woptipng`."
+      continue-on-error: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.PRIVATE_ACCESS_TOKEN }}
+```
+
 ## Notes
 
 Use `@v1` for the latest stable release. Use `@latest` for the latest
